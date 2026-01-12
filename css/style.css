@@ -1286,6 +1286,10 @@ img[src*="logo"] {
   margin: 0 auto;
 }
 
+.hero__content--centered .hero__ctas {
+  justify-content: center;
+}
+
 .hero__subtitle {
   font-size: 1.25rem;
   color: var(--text-muted);
