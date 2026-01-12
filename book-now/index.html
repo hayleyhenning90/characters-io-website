@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO Meta Tags -->
+  <title>Book a Party Character | Characters.io - Easy Online Booking</title>
+  <meta name="description" content="Book your party character in minutes. Choose from 100+ princesses, superheroes, and mascots. Easy online booking with instant confirmation. Serving 26 cities nationwide.">
+  <meta name="keywords" content="book party character, hire princess, book superhero party, character booking, party character reservation">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://characters.io/book-now/">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://characters.io/book-now/">
+  <meta property="og:title" content="Book a Party Character | Easy Online Booking">
+  <meta property="og:description" content="Book your party character in minutes. 100+ characters available in 26 cities.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Datepicker CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.css">
+
+  <!-- Select2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="/" class="header__logo">
+        <img src="/images/logo/logo-color.png" alt="Characters.io" height="50">
+      </a>
+
+      <nav class="nav" id="nav">
+        <div class="nav__dropdown">
+          <a href="/characters/" class="nav__link">Characters</a>
+          <div class="nav__dropdown-menu">
+            <a href="/characters/princesses/" class="nav__link">Princesses</a>
+            <a href="/characters/superheroes/" class="nav__link">Superheroes</a>
+            <a href="/characters/mascots/" class="nav__link">Mascots</a>
+            <a href="/characters/storybook/" class="nav__link">Storybook</a>
+            <a href="/characters/starwars/" class="nav__link">Star Wars</a>
+          </div>
+        </div>
+        <a href="/locations/" class="nav__link">Locations</a>
+        <a href="/about/" class="nav__link">About</a>
+        <a href="/contact/" class="nav__link">Contact</a>
+        <a href="tel:+18562008156" class="btn btn--outline">856-200-8156</a>
+        <a href="/book-now/" class="btn btn--primary">Book Now</a>
+      </nav>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="/">Home</a> <span class="breadcrumb__sep">/</span>
+      <span>Book Now</span>
+    </div>
+  </nav>
+
+  <!-- Booking Section -->
+  <section class="section booking-section">
+    <div class="container">
+      <div class="booking-wrapper">
+        <div class="booking-header">
+          <h1>Book Your <span class="text-gradient">Party Character</span></h1>
+          <p>Fill out the form below and we'll contact you within 24 hours to confirm your booking.</p>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="booking-container">
+          <form method="post" action="/api/booking" id="bookingForm" class="booking-form">
+
+            <!-- Step 1: Event Date -->
+            <div class="booking-step booking-step--active" data-step="1">
+              <h2 class="booking-step__title">When is your event?</h2>
+              <div class="booking-calendar" id="calendarDiv"></div>
+              <input type="hidden" name="bookedDate" id="bookedDate" required>
+            </div>
+
+            <!-- Step 2: Arrival Time -->
+            <div class="booking-step" data-step="2">
+              <h2 class="booking-step__title">What time should we arrive?</h2>
+              <div class="time-grid">
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="9:00 AM" required>
+                  <span>9:00 AM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="10:00 AM">
+                  <span>10:00 AM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="11:00 AM">
+                  <span>11:00 AM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="12:00 PM">
+                  <span>12:00 PM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="1:00 PM">
+                  <span>1:00 PM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="2:00 PM">
+                  <span>2:00 PM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="3:00 PM">
+                  <span>3:00 PM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="4:00 PM">
+                  <span>4:00 PM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="5:00 PM">
+                  <span>5:00 PM</span>
+                </label>
+                <label class="time-option">
+                  <input type="radio" name="bookedTime" value="6:00 PM">
+                  <span>6:00 PM</span>
+                </label>
+              </div>
+              <p class="booking-note">We will do our best to accommodate your request.</p>
+            </div>
+
+            <!-- Step 3: Character Selection -->
+            <div class="booking-step" data-step="3">
+              <h2 class="booking-step__title">What character do you want at your event?</h2>
+
+              <div class="form-group">
+                <label for="characterName">Type one or more characters</label>
+                <input type="text" name="characterName" id="characterName" placeholder="eg. Elsa, Anna, Spider-Man" class="form-input">
+              </div>
+
+              <div class="form-group">
+                <label for="bookedCharacters">Or search & select from our list</label>
+                <select class="character-select" multiple="multiple" name="bookedCharacters[]" id="bookedCharacters">
+                  <optgroup label="Princesses">
+                    <option data-search="frozen princess elsa" data-image-src="/images/characters/elsa.jpg">Elsa - Snow Queen</option>
+                    <option data-search="frozen princess anna" data-image-src="/images/characters/anna.jpg">Anna</option>
+                    <option data-search="moana island princess" data-image-src="/images/characters/moana.jpg">Moana</option>
+                    <option data-search="belle beauty beast princess" data-image-src="/images/characters/belle.jpg">Belle</option>
+                    <option data-search="ariel little mermaid princess" data-image-src="/images/characters/ariel.jpg">Ariel - Little Mermaid</option>
+                    <option data-search="cinderella princess" data-image-src="/images/characters/cinderella.jpg">Cinderella</option>
+                    <option data-search="rapunzel tangled princess" data-image-src="/images/characters/rapunzel.jpg">Rapunzel</option>
+                    <option data-search="jasmine aladdin princess" data-image-src="/images/characters/jasmine.jpg">Jasmine</option>
+                    <option data-search="tiana frog princess" data-image-src="/images/characters/tiana.jpg">Tiana</option>
+                    <option data-search="aurora sleeping beauty princess" data-image-src="/images/characters/aurora.jpg">Aurora - Sleeping Beauty</option>
+                    <option data-search="snow white princess">Snow White</option>
+                    <option data-search="mirabel encanto">Mirabel (Encanto)</option>
+                    <option data-search="isabela encanto">Isabela (Encanto)</option>
+                  </optgroup>
+                  <optgroup label="Superheroes">
+                    <option data-search="spiderman spider-man marvel superhero" data-image-src="/images/characters/spider-man.jpg">Spider-Man</option>
+                    <option data-search="batman dc superhero" data-image-src="/images/characters/batman.jpg">Batman</option>
+                    <option data-search="wonder woman dc superhero">Wonder Woman</option>
+                    <option data-search="captain america marvel superhero">Captain America</option>
+                    <option data-search="black panther marvel superhero">Black Panther</option>
+                    <option data-search="miles morales spiderverse">Miles Morales</option>
+                    <option data-search="ghost spider gwen">Ghost Spider (Gwen)</option>
+                    <option data-search="hulk marvel">Hulk</option>
+                    <option data-search="thor marvel">Thor</option>
+                    <option data-search="superman dc">Superman</option>
+                  </optgroup>
+                  <optgroup label="Mascots">
+                    <option data-search="bluey dog tv show" data-image-src="/images/characters/bluey.jpg">Bluey</option>
+                    <option data-search="bingo bluey dog">Bingo</option>
+                    <option data-search="hello kitty sanrio">Hello Kitty</option>
+                    <option data-search="elmo sesame street">Elmo</option>
+                    <option data-search="baby shark pinkfong">Baby Shark</option>
+                    <option data-search="minion despicable me">Minion</option>
+                    <option data-search="poppy trolls">Poppy (Trolls)</option>
+                    <option data-search="miss rachel youtube">Miss Rachel</option>
+                  </optgroup>
+                  <optgroup label="Storybook">
+                    <option data-search="alice wonderland">Alice in Wonderland</option>
+                    <option data-search="peter pan">Peter Pan</option>
+                    <option data-search="tinkerbell fairy">Tinkerbell</option>
+                    <option data-search="mary poppins">Mary Poppins</option>
+                    <option data-search="mad hatter">Mad Hatter</option>
+                  </optgroup>
+                  <optgroup label="Star Wars">
+                    <option data-search="stormtrooper star wars">Stormtrooper</option>
+                    <option data-search="darth vader star wars">Darth Vader</option>
+                    <option data-search="jedi star wars">Jedi</option>
+                    <option data-search="princess leia star wars">Princess Leia</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+
+            <!-- Step 4: Contact Information -->
+            <div class="booking-step" data-step="4">
+              <h2 class="booking-step__title">Contact Information</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName">First Name *</label>
+                  <input type="text" name="firstName" id="firstName" required class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="lastName">Last Name *</label>
+                  <input type="text" name="lastName" id="lastName" required class="form-input">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="emailAddress">Email Address *</label>
+                  <input type="email" name="emailAddress" id="emailAddress" required class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="phoneNumber">Phone Number *</label>
+                  <input type="tel" name="phoneNumber" id="phoneNumber" required class="form-input">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="partyAddress">Party Address *</label>
+                <input type="text" name="partyAddress" id="partyAddress" required class="form-input" placeholder="Street address, city">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="partyZip">Party ZIP Code *</label>
+                  <input type="text" name="partyZip" id="partyZip" required class="form-input" pattern="[0-9]{5}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="bookingNotes">Notes and Requests (Optional)</label>
+                <textarea name="bookingNotes" id="bookingNotes" rows="4" class="form-input" placeholder="Child's name, age, party theme, special requests..."></textarea>
+              </div>
+
+              <div class="form-group form-group--checkbox">
+                <label>
+                  <input type="checkbox" name="mobileAlertConsent" value="yes">
+                  I consent to receive automated text messages from Characters IO regarding my inquiry. Message and data rates may apply.
+                </label>
+              </div>
+
+              <!-- Honeypot -->
+              <div class="form-group" style="position: absolute; left: -9999px;">
+                <label for="pppDo">Email</label>
+                <input type="text" name="pppDo" id="pppDo" tabindex="-1">
+              </div>
+
+              <!-- reCAPTCHA -->
+              <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="6LcNSfsUAAAAAFZFT1BhzZhcp8EkQ4oGfSqYHPBw"></div>
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="booking-error" id="bookingError"></div>
+
+            <!-- Navigation -->
+            <div class="booking-nav">
+              <button type="button" id="prevStep" class="btn btn--secondary" style="display: none;">Go Back</button>
+              <button type="button" id="nextStep" class="btn btn--primary">Continue</button>
+              <button type="submit" id="submitForm" class="btn btn--gold btn--large" style="display: none;">Request Booking</button>
+            </div>
+          </form>
+
+          <!-- Trust Signals -->
+          <div class="booking-trust">
+            <div class="trust-item">
+              <span class="trust-icon">&#9733;</span>
+              <span>5.0 Rating (2,500+ reviews)</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-icon">&#10003;</span>
+              <span>Money-back guarantee</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-icon">&#128274;</span>
+              <span>Secure booking</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="booking-sidebar">
+          <div class="booking-help">
+            <h3>Need Help?</h3>
+            <p>Our booking team is here to assist you.</p>
+            <a href="tel:+18562008156" class="btn btn--outline btn--full">Call 856-200-8156</a>
+            <p class="booking-hours">Mon-Fri: 9am-6pm<br>Sat-Sun: 8am-8pm</p>
+          </div>
+
+          <div class="booking-faq">
+            <h3>Quick Answers</h3>
+            <details>
+              <summary>How far in advance should I book?</summary>
+              <p>We recommend booking 2-3 weeks in advance, especially for weekends and popular characters.</p>
+            </details>
+            <details>
+              <summary>What's the cancellation policy?</summary>
+              <p>Cancel up to 48 hours before for a full refund. See our <a href="/cancellation-policy/">cancellation policy</a> for details.</p>
+            </details>
+            <details>
+              <summary>Do you travel to my area?</summary>
+              <p>We serve 26 cities nationwide. Check our <a href="/locations/">locations page</a> or enter your ZIP code above.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="/images/logo/logo-white.png" alt="Characters.io" height="40">
+          <p>The nation's premier party character entertainment company.</p>
+          <p><strong>Phone:</strong> 856-200-8156</p>
+        </div>
+        <div class="footer__links">
+          <h4>Characters</h4>
+          <ul>
+            <li><a href="/characters/princesses/">Princesses</a></li>
+            <li><a href="/characters/superheroes/">Superheroes</a></li>
+            <li><a href="/characters/mascots/">Mascots</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about/">About Us</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/cancellation-policy/">Cancellation Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2025 Characters.io. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="/js/booking.js"></script>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      document.getElementById('nav').classList.toggle('nav--open');
+    });
+  </script>
+</body>
+</html>
