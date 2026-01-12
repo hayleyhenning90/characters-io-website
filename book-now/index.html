@@ -35,8 +35,350 @@
   <!-- Styles -->
   <link rel="stylesheet" href="/css/style.css">
 
-  <!-- reCAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    /* Booking Form Styles */
+    .booking-section {
+      padding-top: 120px;
+    }
+
+    .booking-wrapper {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .booking-wrapper {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    .booking-header {
+      margin-bottom: 2rem;
+    }
+
+    .booking-header h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .booking-container {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Step Container */
+    .bookingStep {
+      display: none;
+    }
+
+    .bookingStep.activeStep {
+      display: block;
+    }
+
+    .bookingStep h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--plum);
+    }
+
+    /* Calendar Styling */
+    .air-datepicker {
+      --adp-font-family: var(--font-body);
+      --adp-accent-color: var(--pink);
+      --adp-background-color: var(--white);
+      --adp-cell-background-color-selected: var(--pink);
+      --adp-cell-background-color-selected-hover: var(--pink-dark);
+      width: 100%;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+    }
+
+    .air-datepicker-nav--title {
+      font-weight: 600;
+    }
+
+    /* Time Grid */
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .time-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .time-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .time-option {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .time-option input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .time-option span {
+      display: block;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      background: var(--gray-100);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+
+    .time-option:hover span {
+      border-color: var(--pink);
+      background: #fff5f8;
+    }
+
+    .time-option input:checked + span {
+      background: var(--pink);
+      color: white;
+      border-color: var(--pink);
+    }
+
+    .booking-note {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--plum);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-family: var(--font-body);
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--pink);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Character Select */
+    .select2-container--default .select2-selection--multiple {
+      min-height: 50px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem;
+    }
+
+    .select2-container--default.select2-container--focus .select2-selection--multiple {
+      border-color: var(--pink);
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+      background: var(--pink);
+      border: none;
+      color: white;
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+      color: white;
+      margin-right: 0.5rem;
+    }
+
+    /* Checkbox */
+    .form-group--checkbox label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .form-group--checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Navigation Buttons */
+    .booking-nav {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .booking-nav .btn {
+      flex: 1;
+    }
+
+    /* Error Message */
+    .bookingError {
+      display: none;
+      background: #fee2e2;
+      color: #dc2626;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    /* Trust Signals */
+    .booking-trust {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .trust-icon {
+      color: var(--gold);
+    }
+
+    /* Sidebar */
+    .booking-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .booking-help,
+    .booking-faq {
+      background: var(--gray-50);
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+    }
+
+    .booking-help h3,
+    .booking-faq h3 {
+      margin-bottom: 0.75rem;
+      color: var(--plum);
+    }
+
+    .booking-help p {
+      margin-bottom: 1rem;
+      font-size: 0.9375rem;
+    }
+
+    .booking-hours {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+    }
+
+    .booking-faq details {
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0.75rem 0;
+    }
+
+    .booking-faq details:last-child {
+      border-bottom: none;
+    }
+
+    .booking-faq summary {
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--plum);
+    }
+
+    .booking-faq details p {
+      margin-top: 0.75rem;
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+    }
+
+    /* Animation */
+    .animated {
+      animation-duration: 0.4s;
+      animation-fill-mode: both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOutUp {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+
+    .fadeInUp {
+      animation-name: fadeInUp;
+    }
+
+    .fadeOutUp {
+      animation-name: fadeOutUp;
+    }
+
+    .stepDisabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -84,222 +426,330 @@
   <section class="section booking-section">
     <div class="container">
       <div class="booking-wrapper">
-        <div class="booking-header">
-          <h1>Book Your <span class="text-gradient">Party Character</span></h1>
-          <p>Fill out the form below and we'll contact you within 24 hours to confirm your booking.</p>
-        </div>
+        <div class="booking-main">
+          <div class="booking-header">
+            <h1>Book Your <span class="text-gradient">Party Character</span></h1>
+            <p>Fill out the form below and we'll contact you within 24 hours to confirm your booking.</p>
+          </div>
 
-        <!-- Booking Form -->
-        <div class="booking-container">
-          <form method="post" action="/api/booking" id="bookingForm" class="booking-form">
+          <!-- Booking Form -->
+          <div class="booking-container">
+            <form method="post" action="/api/booking" id="bookingForm" class="booking-form">
 
-            <!-- Step 1: Event Date -->
-            <div class="booking-step booking-step--active" data-step="1">
-              <h2 class="booking-step__title">When is your event?</h2>
-              <div class="booking-calendar" id="calendarDiv"></div>
-              <input type="hidden" name="bookedDate" id="bookedDate" required>
-            </div>
+              <!-- Error Message -->
+              <div class="bookingError" id="bookingError"></div>
 
-            <!-- Step 2: Arrival Time -->
-            <div class="booking-step" data-step="2">
-              <h2 class="booking-step__title">What time should we arrive?</h2>
-              <div class="time-grid">
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="9:00 AM" required>
-                  <span>9:00 AM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="10:00 AM">
-                  <span>10:00 AM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="11:00 AM">
-                  <span>11:00 AM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="12:00 PM">
-                  <span>12:00 PM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="1:00 PM">
-                  <span>1:00 PM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="2:00 PM">
-                  <span>2:00 PM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="3:00 PM">
-                  <span>3:00 PM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="4:00 PM">
-                  <span>4:00 PM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="5:00 PM">
-                  <span>5:00 PM</span>
-                </label>
-                <label class="time-option">
-                  <input type="radio" name="bookedTime" value="6:00 PM">
-                  <span>6:00 PM</span>
-                </label>
-              </div>
-              <p class="booking-note">We will do our best to accommodate your request.</p>
-            </div>
-
-            <!-- Step 3: Character Selection -->
-            <div class="booking-step" data-step="3">
-              <h2 class="booking-step__title">What character do you want at your event?</h2>
-
-              <div class="form-group">
-                <label for="characterName">Type one or more characters</label>
-                <input type="text" name="characterName" id="characterName" placeholder="eg. Elsa, Anna, Spider-Man" class="form-input">
+              <!-- Step 1: Event Date -->
+              <div class="bookingStep bookingCalendar activeStep" data-step="1">
+                <h2>When is your event?</h2>
+                <div id="calendarDiv"></div>
+                <input type="hidden" name="bookedDate" id="bookedDate" required>
               </div>
 
-              <div class="form-group">
-                <label for="bookedCharacters">Or search & select from our list</label>
-                <select class="character-select" multiple="multiple" name="bookedCharacters[]" id="bookedCharacters">
-                  <optgroup label="Princesses">
-                    <option data-search="frozen princess elsa" data-image-src="/images/characters/elsa.jpg">Elsa - Snow Queen</option>
-                    <option data-search="frozen princess anna" data-image-src="/images/characters/anna.jpg">Anna</option>
-                    <option data-search="moana island princess" data-image-src="/images/characters/moana.jpg">Moana</option>
-                    <option data-search="belle beauty beast princess" data-image-src="/images/characters/belle.jpg">Belle</option>
-                    <option data-search="ariel little mermaid princess" data-image-src="/images/characters/ariel.jpg">Ariel - Little Mermaid</option>
-                    <option data-search="cinderella princess" data-image-src="/images/characters/cinderella.jpg">Cinderella</option>
-                    <option data-search="rapunzel tangled princess" data-image-src="/images/characters/rapunzel.jpg">Rapunzel</option>
-                    <option data-search="jasmine aladdin princess" data-image-src="/images/characters/jasmine.jpg">Jasmine</option>
-                    <option data-search="tiana frog princess" data-image-src="/images/characters/tiana.jpg">Tiana</option>
-                    <option data-search="aurora sleeping beauty princess" data-image-src="/images/characters/aurora.jpg">Aurora - Sleeping Beauty</option>
-                    <option data-search="snow white princess">Snow White</option>
-                    <option data-search="mirabel encanto">Mirabel (Encanto)</option>
-                    <option data-search="isabela encanto">Isabela (Encanto)</option>
-                  </optgroup>
-                  <optgroup label="Superheroes">
-                    <option data-search="spiderman spider-man marvel superhero" data-image-src="/images/characters/spider-man.jpg">Spider-Man</option>
-                    <option data-search="batman dc superhero" data-image-src="/images/characters/batman.jpg">Batman</option>
-                    <option data-search="wonder woman dc superhero">Wonder Woman</option>
-                    <option data-search="captain america marvel superhero">Captain America</option>
-                    <option data-search="black panther marvel superhero">Black Panther</option>
-                    <option data-search="miles morales spiderverse">Miles Morales</option>
-                    <option data-search="ghost spider gwen">Ghost Spider (Gwen)</option>
-                    <option data-search="hulk marvel">Hulk</option>
-                    <option data-search="thor marvel">Thor</option>
-                    <option data-search="superman dc">Superman</option>
-                  </optgroup>
-                  <optgroup label="Mascots">
-                    <option data-search="bluey dog tv show" data-image-src="/images/characters/bluey.jpg">Bluey</option>
-                    <option data-search="bingo bluey dog">Bingo</option>
-                    <option data-search="hello kitty sanrio">Hello Kitty</option>
-                    <option data-search="elmo sesame street">Elmo</option>
-                    <option data-search="baby shark pinkfong">Baby Shark</option>
-                    <option data-search="minion despicable me">Minion</option>
-                    <option data-search="poppy trolls">Poppy (Trolls)</option>
-                    <option data-search="miss rachel youtube">Miss Rachel</option>
-                  </optgroup>
-                  <optgroup label="Storybook">
-                    <option data-search="alice wonderland">Alice in Wonderland</option>
-                    <option data-search="peter pan">Peter Pan</option>
-                    <option data-search="tinkerbell fairy">Tinkerbell</option>
-                    <option data-search="mary poppins">Mary Poppins</option>
-                    <option data-search="mad hatter">Mad Hatter</option>
-                  </optgroup>
-                  <optgroup label="Star Wars">
-                    <option data-search="stormtrooper star wars">Stormtrooper</option>
-                    <option data-search="darth vader star wars">Darth Vader</option>
-                    <option data-search="jedi star wars">Jedi</option>
-                    <option data-search="princess leia star wars">Princess Leia</option>
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-
-            <!-- Step 4: Contact Information -->
-            <div class="booking-step" data-step="4">
-              <h2 class="booking-step__title">Contact Information</h2>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="firstName">First Name *</label>
-                  <input type="text" name="firstName" id="firstName" required class="form-input">
+              <!-- Step 2: Arrival Time -->
+              <div class="bookingStep bookingTimes" data-step="2">
+                <h2>What time should we arrive?</h2>
+                <div class="time-grid">
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="9:00 AM" class="arrivalTime" required>
+                    <span>9:00 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="9:15 AM" class="arrivalTime">
+                    <span>9:15 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="9:30 AM" class="arrivalTime">
+                    <span>9:30 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="9:45 AM" class="arrivalTime">
+                    <span>9:45 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="10:00 AM" class="arrivalTime">
+                    <span>10:00 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="10:15 AM" class="arrivalTime">
+                    <span>10:15 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="10:30 AM" class="arrivalTime">
+                    <span>10:30 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="10:45 AM" class="arrivalTime">
+                    <span>10:45 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="11:00 AM" class="arrivalTime">
+                    <span>11:00 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="11:15 AM" class="arrivalTime">
+                    <span>11:15 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="11:30 AM" class="arrivalTime">
+                    <span>11:30 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="11:45 AM" class="arrivalTime">
+                    <span>11:45 AM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="12:00 PM" class="arrivalTime">
+                    <span>12:00 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="12:15 PM" class="arrivalTime">
+                    <span>12:15 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="12:30 PM" class="arrivalTime">
+                    <span>12:30 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="12:45 PM" class="arrivalTime">
+                    <span>12:45 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="1:00 PM" class="arrivalTime">
+                    <span>1:00 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="1:15 PM" class="arrivalTime">
+                    <span>1:15 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="1:30 PM" class="arrivalTime">
+                    <span>1:30 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="1:45 PM" class="arrivalTime">
+                    <span>1:45 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="2:00 PM" class="arrivalTime">
+                    <span>2:00 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="2:15 PM" class="arrivalTime">
+                    <span>2:15 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="2:30 PM" class="arrivalTime">
+                    <span>2:30 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="2:45 PM" class="arrivalTime">
+                    <span>2:45 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="3:00 PM" class="arrivalTime">
+                    <span>3:00 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="3:15 PM" class="arrivalTime">
+                    <span>3:15 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="3:30 PM" class="arrivalTime">
+                    <span>3:30 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="3:45 PM" class="arrivalTime">
+                    <span>3:45 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="4:00 PM" class="arrivalTime">
+                    <span>4:00 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="4:15 PM" class="arrivalTime">
+                    <span>4:15 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="4:30 PM" class="arrivalTime">
+                    <span>4:30 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="4:45 PM" class="arrivalTime">
+                    <span>4:45 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="5:00 PM" class="arrivalTime">
+                    <span>5:00 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="5:15 PM" class="arrivalTime">
+                    <span>5:15 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="5:30 PM" class="arrivalTime">
+                    <span>5:30 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="5:45 PM" class="arrivalTime">
+                    <span>5:45 PM</span>
+                  </label>
+                  <label class="time-option">
+                    <input type="radio" name="bookedTime" value="6:00 PM" class="arrivalTime">
+                    <span>6:00 PM</span>
+                  </label>
                 </div>
+                <p class="booking-note">We will do our best to accommodate your request.</p>
+              </div>
+
+              <!-- Step 3: Character Selection -->
+              <div class="bookingStep bookingCharacters" data-step="3">
+                <h2>What character do you want at your event?</h2>
+
                 <div class="form-group">
-                  <label for="lastName">Last Name *</label>
-                  <input type="text" name="lastName" id="lastName" required class="form-input">
+                  <label for="characterName">Type one or more characters</label>
+                  <input type="text" name="characterName" id="characterName" placeholder="eg. Elsa, Anna, Spider-Man" class="form-input">
+                </div>
+
+                <div class="form-group">
+                  <label for="bookedCharacters">Or search & select from our list</label>
+                  <select class="characterList" multiple="multiple" name="bookedCharacters[]" id="bookedCharacters">
+                    <optgroup label="Princesses">
+                      <option data-search="frozen princess elsa" data-image-src="/images/characters/elsa.jpg">Elsa - Snow Queen</option>
+                      <option data-search="frozen princess anna" data-image-src="/images/characters/anna.jpg">Anna</option>
+                      <option data-search="moana island princess" data-image-src="/images/characters/moana.jpg">Moana</option>
+                      <option data-search="belle beauty beast princess" data-image-src="/images/characters/belle.jpg">Belle</option>
+                      <option data-search="ariel little mermaid princess" data-image-src="/images/characters/ariel.jpg">Ariel - Little Mermaid</option>
+                      <option data-search="cinderella princess" data-image-src="/images/characters/cinderella.jpg">Cinderella</option>
+                      <option data-search="rapunzel tangled princess" data-image-src="/images/characters/rapunzel.jpg">Rapunzel</option>
+                      <option data-search="jasmine aladdin princess" data-image-src="/images/characters/jasmine.jpg">Jasmine</option>
+                      <option data-search="tiana frog princess" data-image-src="/images/characters/tiana.jpg">Tiana</option>
+                      <option data-search="aurora sleeping beauty princess" data-image-src="/images/characters/aurora.jpg">Aurora - Sleeping Beauty</option>
+                      <option data-search="snow white princess">Snow White</option>
+                      <option data-search="mirabel encanto">Mirabel (Encanto)</option>
+                      <option data-search="isabela encanto">Isabela (Encanto)</option>
+                    </optgroup>
+                    <optgroup label="Superheroes">
+                      <option data-search="spiderman spider-man marvel superhero" data-image-src="/images/characters/spider-man.jpg">Spider-Man</option>
+                      <option data-search="batman dc superhero" data-image-src="/images/characters/batman.jpg">Batman</option>
+                      <option data-search="wonder woman dc superhero">Wonder Woman</option>
+                      <option data-search="captain america marvel superhero">Captain America</option>
+                      <option data-search="black panther marvel superhero">Black Panther</option>
+                      <option data-search="miles morales spiderverse">Miles Morales</option>
+                      <option data-search="ghost spider gwen">Ghost Spider (Gwen)</option>
+                      <option data-search="hulk marvel">Hulk</option>
+                      <option data-search="thor marvel">Thor</option>
+                      <option data-search="superman dc">Superman</option>
+                    </optgroup>
+                    <optgroup label="Mascots">
+                      <option data-search="bluey dog tv show" data-image-src="/images/characters/bluey.jpg">Bluey</option>
+                      <option data-search="bingo bluey dog">Bingo</option>
+                      <option data-search="hello kitty sanrio">Hello Kitty</option>
+                      <option data-search="elmo sesame street">Elmo</option>
+                      <option data-search="baby shark pinkfong">Baby Shark</option>
+                      <option data-search="minion despicable me">Minion</option>
+                      <option data-search="poppy trolls">Poppy (Trolls)</option>
+                      <option data-search="miss rachel youtube">Miss Rachel</option>
+                    </optgroup>
+                    <optgroup label="Storybook">
+                      <option data-search="alice wonderland">Alice in Wonderland</option>
+                      <option data-search="peter pan">Peter Pan</option>
+                      <option data-search="tinkerbell fairy">Tinkerbell</option>
+                      <option data-search="mary poppins">Mary Poppins</option>
+                      <option data-search="mad hatter">Mad Hatter</option>
+                    </optgroup>
+                    <optgroup label="Star Wars">
+                      <option data-search="stormtrooper star wars">Stormtrooper</option>
+                      <option data-search="darth vader star wars">Darth Vader</option>
+                      <option data-search="jedi star wars">Jedi</option>
+                      <option data-search="princess leia star wars">Princess Leia</option>
+                    </optgroup>
+                  </select>
                 </div>
               </div>
 
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="emailAddress">Email Address *</label>
-                  <input type="email" name="emailAddress" id="emailAddress" required class="form-input">
+              <!-- Step 4: Contact Information -->
+              <div class="bookingStep bookingContact" data-step="4">
+                <h2>Contact Information</h2>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" name="firstName" id="firstName" required class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" name="lastName" id="lastName" required class="form-input">
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="phoneNumber">Phone Number *</label>
-                  <input type="tel" name="phoneNumber" id="phoneNumber" required class="form-input">
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="emailAddress">Email Address *</label>
+                    <input type="email" name="emailAddress" id="emailAddress" required class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label for="phoneNumber">Phone Number *</label>
+                    <input type="tel" name="phoneNumber" id="phoneNumber" required class="form-input">
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group">
-                <label for="partyAddress">Party Address *</label>
-                <input type="text" name="partyAddress" id="partyAddress" required class="form-input" placeholder="Street address, city">
-              </div>
-
-              <div class="form-row">
                 <div class="form-group">
-                  <label for="partyZip">Party ZIP Code *</label>
-                  <input type="text" name="partyZip" id="partyZip" required class="form-input" pattern="[0-9]{5}">
+                  <label for="partyAddress">Party Address *</label>
+                  <input type="text" name="partyAddress" id="partyAddress" required class="form-input" placeholder="Street address, city">
                 </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="partyZip">Party ZIP Code *</label>
+                    <input type="text" name="partyZip" id="partyZip" required class="form-input" pattern="[0-9]{5}">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="bookingNotes">Notes and Requests (Optional)</label>
+                  <textarea name="bookingNotes" id="bookingNotes" rows="4" class="form-input" placeholder="Child's name, age, party theme, special requests..."></textarea>
+                </div>
+
+                <div class="form-group form-group--checkbox">
+                  <label>
+                    <input type="checkbox" name="mobileAlertConsent" value="yes">
+                    I consent to receive automated text messages from Characters IO regarding my inquiry. Message and data rates may apply.
+                  </label>
+                </div>
+
+                <!-- Honeypot -->
+                <div class="importantField" style="position: absolute; left: -9999px;">
+                  <label for="pppDo">Email</label>
+                  <input type="text" name="pppDo" id="pppDo" tabindex="-1">
+                </div>
+
+                <!-- Submit button hidden, triggered by submitForm -->
+                <button type="submit" id="bookingSubmit" style="display: none;">Submit</button>
               </div>
 
-              <div class="form-group">
-                <label for="bookingNotes">Notes and Requests (Optional)</label>
-                <textarea name="bookingNotes" id="bookingNotes" rows="4" class="form-input" placeholder="Child's name, age, party theme, special requests..."></textarea>
+              <!-- Navigation -->
+              <div class="booking-nav">
+                <button type="button" id="prevStep" class="btn btn--secondary" style="display: none;">Go Back</button>
+                <button type="button" id="nextStep" class="btn btn--primary">Continue</button>
+                <button type="button" id="submitForm" class="btn btn--gold btn--large" style="display: none;">Request Booking</button>
               </div>
+            </form>
 
-              <div class="form-group form-group--checkbox">
-                <label>
-                  <input type="checkbox" name="mobileAlertConsent" value="yes">
-                  I consent to receive automated text messages from Characters IO regarding my inquiry. Message and data rates may apply.
-                </label>
+            <!-- Trust Signals -->
+            <div class="booking-trust">
+              <div class="trust-item">
+                <span class="trust-icon">&#9733;</span>
+                <span>5.0 Rating (2,500+ reviews)</span>
               </div>
-
-              <!-- Honeypot -->
-              <div class="form-group" style="position: absolute; left: -9999px;">
-                <label for="pppDo">Email</label>
-                <input type="text" name="pppDo" id="pppDo" tabindex="-1">
+              <div class="trust-item">
+                <span class="trust-icon">&#10003;</span>
+                <span>Money-back guarantee</span>
               </div>
-
-              <!-- reCAPTCHA -->
-              <div class="form-group">
-                <div class="g-recaptcha" data-sitekey="6LcNSfsUAAAAAFZFT1BhzZhcp8EkQ4oGfSqYHPBw"></div>
+              <div class="trust-item">
+                <span class="trust-icon">&#128274;</span>
+                <span>Secure booking</span>
               </div>
-            </div>
-
-            <!-- Error Message -->
-            <div class="booking-error" id="bookingError"></div>
-
-            <!-- Navigation -->
-            <div class="booking-nav">
-              <button type="button" id="prevStep" class="btn btn--secondary" style="display: none;">Go Back</button>
-              <button type="button" id="nextStep" class="btn btn--primary">Continue</button>
-              <button type="submit" id="submitForm" class="btn btn--gold btn--large" style="display: none;">Request Booking</button>
-            </div>
-          </form>
-
-          <!-- Trust Signals -->
-          <div class="booking-trust">
-            <div class="trust-item">
-              <span class="trust-icon">&#9733;</span>
-              <span>5.0 Rating (2,500+ reviews)</span>
-            </div>
-            <div class="trust-item">
-              <span class="trust-icon">&#10003;</span>
-              <span>Money-back guarantee</span>
-            </div>
-            <div class="trust-item">
-              <span class="trust-icon">&#128274;</span>
-              <span>Secure booking</span>
             </div>
           </div>
         </div>
@@ -369,12 +819,245 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/locale/en.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script src="/js/booking.js"></script>
 
   <script>
+    // Mobile menu toggle
     document.getElementById('menu-toggle').addEventListener('click', function() {
       document.getElementById('nav').classList.toggle('nav--open');
+    });
+
+    // Initialize Air Datepicker
+    new AirDatepicker('#calendarDiv', {
+      locale: {
+        days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+        months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        today: 'Today',
+        clear: 'Clear',
+        dateFormat: 'MM/dd/yyyy',
+        firstDay: 0
+      },
+      inline: true,
+      minDate: new Date(),
+      maxDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+      onSelect: function({date, formattedDate}) {
+        document.getElementById('bookedDate').value = formattedDate;
+        document.getElementById('nextStep').click();
+      }
+    });
+
+    // Initialize Select2 for character selection
+    $(document).ready(function() {
+      var characterListParent = $(".characterList").parent();
+      $('.characterList').select2({
+        placeholder: 'Search Characters',
+        width: '100%',
+        closeOnSelect: false,
+        dropdownParent: characterListParent,
+        matcher: function(params, data) {
+          if ($.trim(params.term) === '') {
+            return data;
+          }
+          var searchTerm = params.term.toUpperCase();
+          var dataSearch = ($(data.element).data('search') || '').toString().toUpperCase();
+          var dataText = (data.text || '').toUpperCase();
+
+          if (dataSearch.indexOf(searchTerm) > -1 || dataText.indexOf(searchTerm) > -1) {
+            return data;
+          }
+          return null;
+        }
+      });
+
+      // Animation helper
+      function animateCSS(element, animationName, callback) {
+        var node = document.querySelector(element);
+        if (!node) return;
+        node.classList.add('animated', animationName);
+
+        function handleAnimationEnd() {
+          node.classList.remove('animated', animationName);
+          node.removeEventListener('animationend', handleAnimationEnd);
+          if (typeof callback === 'function') callback();
+        }
+
+        node.addEventListener('animationend', handleAnimationEnd);
+      }
+
+      // Validation helpers
+      function isValidEmailAddress(email) {
+        var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return pattern.test(email);
+      }
+
+      function isValidPartyZip(zip) {
+        var pattern = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+        return pattern.test(zip);
+      }
+
+      // Next Step
+      $("#nextStep").click(function() {
+        var $this = $(this);
+        $this.addClass('stepDisabled');
+        var $activeStep = $('.bookingStep.activeStep');
+
+        // Validate current step
+        if ($activeStep.hasClass('bookingCalendar') && $('#bookedDate').val() === '') {
+          $('.bookingError').html("Please select an event date.").fadeIn();
+          setTimeout(function() { $('.bookingError').fadeOut("slow"); }, 5000);
+          $this.removeClass('stepDisabled');
+          return false;
+        }
+
+        if ($activeStep.hasClass('bookingTimes') && !$('input[name="bookedTime"]:checked').val()) {
+          $('.bookingError').html("Please select an arrival time for your event.").fadeIn();
+          setTimeout(function() { $('.bookingError').fadeOut("slow"); }, 5000);
+          $this.removeClass('stepDisabled');
+          return false;
+        }
+
+        if ($activeStep.hasClass('bookingCharacters')) {
+          var characterInput = $('#characterName').val();
+          var selectedCharacters = $('#bookedCharacters').val();
+          if (characterInput === '' && (!selectedCharacters || selectedCharacters.length === 0)) {
+            $('.bookingError').html("Please select at least one character.").fadeIn();
+            setTimeout(function() { $('.bookingError').fadeOut("slow"); }, 5000);
+            $this.removeClass('stepDisabled');
+            return false;
+          }
+        }
+
+        // Animate to next step
+        animateCSS('.bookingStep.activeStep', 'fadeOutUp', function() {
+          var $next = $activeStep.next('.bookingStep');
+          $activeStep.removeClass('activeStep');
+          $next.addClass('activeStep');
+          animateCSS('.bookingStep.activeStep', 'fadeInUp');
+          $this.removeClass('stepDisabled');
+        });
+
+        $('.bookingError').hide();
+
+        // Update navigation buttons
+        var $currentActive = $('.bookingStep.activeStep');
+        setTimeout(function() {
+          var $newActive = $('.bookingStep.activeStep');
+          if ($newActive.next('.bookingStep').length === 0) {
+            $('#nextStep').hide();
+            $('#submitForm').show();
+          }
+          $('#prevStep').show();
+        }, 450);
+
+        return false;
+      });
+
+      // Previous Step
+      $("#prevStep").click(function() {
+        var $this = $(this);
+        $this.addClass('stepDisabled');
+
+        animateCSS('.bookingStep.activeStep', 'fadeOutUp', function() {
+          var $activeStep = $('.bookingStep.activeStep');
+          var $prev = $activeStep.prev('.bookingStep');
+          $activeStep.removeClass('activeStep');
+          $prev.addClass('activeStep');
+          animateCSS('.bookingStep.activeStep', 'fadeInUp');
+          $this.removeClass('stepDisabled');
+        });
+
+        setTimeout(function() {
+          var $newActive = $('.bookingStep.activeStep');
+          if ($newActive.prev('.bookingStep').length === 0) {
+            $('#prevStep').hide();
+          }
+          $('#nextStep').show();
+          $('#submitForm').hide();
+        }, 450);
+
+        return false;
+      });
+
+      // Submit Form
+      $('#submitForm').click(function() {
+        var $this = $(this);
+        var invalidForm = false;
+        var invalidEmail = false;
+        var invalidZip = false;
+
+        // Reset styles
+        $('input').css('border-color', '');
+
+        // Validate fields
+        var firstName = $('#firstName');
+        var lastName = $('#lastName');
+        var emailAddress = $('#emailAddress');
+        var phoneNumber = $('#phoneNumber');
+        var partyAddress = $('#partyAddress');
+        var partyZip = $('#partyZip');
+        var pppDo = $('#pppDo');
+
+        if ($.trim(firstName.val()) === '') {
+          firstName.css('border-color', 'red');
+          invalidForm = true;
+        }
+        if ($.trim(lastName.val()) === '') {
+          lastName.css('border-color', 'red');
+          invalidForm = true;
+        }
+        if ($.trim(emailAddress.val()) === '') {
+          emailAddress.css('border-color', 'red');
+          invalidForm = true;
+        } else if (!isValidEmailAddress(emailAddress.val())) {
+          emailAddress.css('border-color', 'red');
+          invalidEmail = true;
+        }
+        if ($.trim(phoneNumber.val()) === '') {
+          phoneNumber.css('border-color', 'red');
+          invalidForm = true;
+        }
+        if ($.trim(partyAddress.val()) === '') {
+          partyAddress.css('border-color', 'red');
+          invalidForm = true;
+        }
+        if ($.trim(partyZip.val()) === '') {
+          partyZip.css('border-color', 'red');
+          invalidForm = true;
+        } else if (!isValidPartyZip(partyZip.val())) {
+          partyZip.css('border-color', 'red');
+          invalidZip = true;
+        }
+
+        // Honeypot check
+        if ($.trim(pppDo.val()) !== '') {
+          invalidForm = true;
+        }
+
+        setTimeout(function() {
+          $('input').css('border-color', '');
+          $('.bookingError').fadeOut("slow");
+        }, 5000);
+
+        if (invalidForm) {
+          $('.bookingError').html("Please fill the highlighted fields.").fadeIn();
+          return false;
+        } else if (invalidEmail) {
+          $('.bookingError').html("Please enter a valid Email Address.").fadeIn();
+          return false;
+        } else if (invalidZip) {
+          $('.bookingError').html("Please enter a valid ZIP Code.").fadeIn();
+          return false;
+        } else {
+          $this.text('Processing...');
+          $this.addClass('stepDisabled');
+          $('#bookingForm').submit();
+          return true;
+        }
+      });
     });
   </script>
 </body>

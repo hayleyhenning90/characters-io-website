@@ -373,7 +373,7 @@ img[src*="logo"] {
 }
 
 .btn--outline {
-  background: transparent;
+  background: var(--white);
   color: var(--plum);
   border: 2px solid var(--plum);
 }
@@ -673,6 +673,7 @@ img[src*="logo"] {
   overflow: hidden;
   cursor: pointer;
   min-height: 280px;
+  height: 100%;
 }
 
 .category-card__image {
@@ -898,23 +899,26 @@ img[src*="logo"] {
 
 .location-tag {
   padding: 0.75rem 1.5rem;
-  background: var(--gray-100);
+  background: var(--white);
   color: var(--plum);
   font-family: var(--font-display);
   font-weight: 500;
   border-radius: var(--radius-full);
+  border: 2px solid var(--gray-300);
   transition: all var(--duration-fast) var(--ease-out);
 }
 
 .location-tag:hover {
   background: var(--pink);
   color: var(--white);
+  border-color: var(--pink);
   transform: translateY(-2px);
 }
 
 .location-tag--featured {
-  background: var(--plum);
-  color: var(--white);
+  background: var(--white);
+  color: var(--plum);
+  border-color: var(--gray-300);
 }
 
 /* ============================================
@@ -1542,9 +1546,15 @@ img[src*="logo"] {
    Features Grid
    ============================================ */
 .features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-lg);
+}
+
+.features-grid .feature-card {
+  flex: 0 1 calc(33.333% - var(--space-lg));
+  min-width: 280px;
 }
 
 .feature-card {
