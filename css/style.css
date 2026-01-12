@@ -183,7 +183,7 @@ section {
   right: 0;
   z-index: 1000;
   padding: var(--space-sm) 0;
-  background: transparent;
+  background: var(--white);
   transition: all var(--duration-normal) var(--ease-out);
 }
 
@@ -285,6 +285,31 @@ img[src*="logo"] {
   .nav {
     display: flex;
   }
+}
+
+/* Mobile Menu - Open State */
+.nav--open {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--white);
+  padding: var(--space-md);
+  gap: var(--space-sm);
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.nav--open .nav__dropdown-menu {
+  position: static;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  box-shadow: none;
+  padding-left: var(--space-md);
 }
 
 /* Mobile Menu Toggle */
