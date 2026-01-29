@@ -96,50 +96,6 @@ $('.characterList').select2({
 	dropdownParent: characterListParent
 });
 
-////////////////heree is the change ////////////////////////
-var characterListParent = $(".characterList_new").parent();
-$('.characterList_new').select2({
-	placeholder: 'Search Characters',
-	width: '100%',
-	closeOnSelect: false,
-	scrollAfterSelect: true,
-	templateResult: select2CopyClasses,
-	templateSelection: select2CopyClasses,
-	matcher: matchCustom,
-	dropdownParent: characterListParent,
-	tags: true,  // Enable tagging (allow users to type custom values)
-	createTag: function (params) {
-		return {
-			id: params.term,
-			text: params.term
-		};
-	}
-});
-let searchFieldValue = ''; // Store the search input value
-var typedValue = '';
-/**new book now module js start */
-
-$('#bookedCharacters_new').on('select2:open', function () {
-	const searchField = $('.select2-container--open .select2-search__field');
-	console.log("Dropdown opened");
-	typedValue = $(this).next('.select2').find('.select2-search__field').val();
-	// Capture the value when the dropdown is open and input loses focus
-	searchField.on('blur', function () {
-		console.log(`Focus lost. Current value: ${$(this).val()}`);
-	});
-});
-
-$('#bookedCharacters_new').on('select2:close', function () {
-	var selectedValue = $(this).val();
-	if (selectedValue == '') {
-		var options = $(this).find('option');
-		var lastOption = options.last().val();
-		$(this).val(lastOption).trigger('change');
-		// return;
-	}
-
-});
-//////////////////////////////////////book now new js end////////////////////////////////////////
 // Character Image Preview START
 $(document).on({
 	mouseenter: function () {
@@ -216,31 +172,6 @@ $(document).ready(function () {
 				return false;
 			}
 		}
-		///////////////////////////////////////validation for new /////////////////////////////
-		if ($('.bookingStep.bookingCharacters_new.activeStep').length != 0 && $('.bookingStep.bookingCharacters_new.activeStep input').val() === '' && $('#bookedCharacters_new').val() == null) {
-			$('.bookingError').html("Please select at least one character.").fadeIn();
-			setTimeout(function () {
-				$('.bookingError').fadeOut("slow");
-			}, 5000);
-
-			$(this).removeClass('stepDisabled');
-			return false;
-		}
-		if ($('.bookingStep.bookingCharacters_new.activeStep').length !== 0) {
-			const characterInput = $('.bookingStep.bookingCharacters_new.activeStep input').val();
-			const selectedCharacters = $('#bookedCharacters_new').val();
-
-
-			if (characterInput === '' && (selectedCharacters === null || selectedCharacters.length === 0)) {
-				$('.bookingError').html("Please select at least one character.").fadeIn();
-				setTimeout(function () {
-					$('.bookingError').fadeOut("slow");
-				}, 5000);
-
-				$(this).removeClass('stepDisabled');
-				return false;
-			}
-		}
 		animateCSS('.bookingStep.activeStep', 'fadeOutUp', function () {
 			$(".bookingStep.activeStep").nextAll('.bookingStep').first().addClass('activeStep').prevAll('.bookingStep').first().removeClass('activeStep');
 			animateCSS('.bookingStep.activeStep', 'fadeInUp');
@@ -284,9 +215,6 @@ $(document).ready(function () {
 	$('#submitForm').click(function () {
 		$("#bookingSubmit").click();
 	});
-	$('.submit_new_form').click(function () {
-		$("#bookingSubmit_new").click();
-	});
 
 	$('.extraCharactersButton').click(function () {
 		$(".extraCharactersWrapper").show();
@@ -302,9 +230,11 @@ $(document).ready(function () {
 		var partyZip = $('#partyZip');
 		var bookedLocation = $('#bookedLocation');
 		var bookedLocationSelect2 = $('#bookedLocation + .select2 .select2-selection--single');
-		// var username = $('#username'); // Used as Captcha to trick bots	
+		// var username = $('#username'); // Used as Captcha to trick bots
 		var pppDo = $('#pppDo'); // Used as Captcha to trick bots
-		var reCaptcha = grecaptcha.getResponse();
+
+		// Check if reCaptcha exists (may not be loaded on all pages)
+		var reCaptcha = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : 'skip';
 
 		var invalidForm = false;
 		var invalidEmail = false;
@@ -366,7 +296,8 @@ $(document).ready(function () {
 			invalidForm = true;
 		}
 
-		if (reCaptcha.length == 0) {
+		// Only validate reCaptcha if it's actually loaded (not 'skip')
+		if (reCaptcha !== 'skip' && reCaptcha.length == 0) {
 			invalidCaptcha = true;
 		}
 
@@ -391,9 +322,17 @@ $(document).ready(function () {
 			$('.bookingError').html("Please click on Captcha.").fadeIn();
 			return false;
 		} else {
+			// Validation passed - trigger form submit event for CRM integration to handle
+			// Don't return true (which would cause native POST to non-existent backend)
 			$('#submitForm').text('Processing...');
 			$('#submitForm').addClass('stepDisabled');
-			return true;
+
+			// Dispatch submit event for CRM integration to intercept
+			var form = document.getElementById('bookingForm');
+			if (form) {
+				form.dispatchEvent(new Event('submit', { cancelable: true }));
+			}
+			return false;
 		}
 	});
 
@@ -420,150 +359,7 @@ $(document).ready(function () {
 });
 
 $(document).keyup(function (e) {
-	if (e.key === "Escape") { // escape key maps to keycode `27`
+	if (e.key === "Escape") {
 		$('.pppModalClose').click();
 	}
 });
-/////////////////addnew form submission////////////////////////////
-
-jQuery("#bookingSubmit_new").on('click', function (e) {
-	e.preventDefault();
-	var firstName = $('#firstName');
-	var lastName = $('#lastName');
-	var emailAddress = $('#emailAddress');
-	var phoneNumber = $('#phoneNumber');
-	var partyAddress = $('#partyAddress');
-	var partyZip = $('#options');
-	var bookedLocation = $('#bookedLocation');
-	var bookedLocationSelect2 = $('#bookedLocation + .select2 .select2-selection--single');
-	var pppDo = $('#pppDo');
-	// var reCaptcha = grecaptcha.getResponse();
-
-	var invalidForm = false;
-	var invalidEmail = false;
-	var invalidPhone = false;  // Ensure this is declared
-	var invalidZip = false;
-	var invalidCaptcha = false;  // Ensure this is declared
-
-	$('#submitForm').removeClass('stepDisabled');
-	$('#submitForm').text('Request Booking');
-
-	// Clear any existing error messages
-	$('.error-message').remove();
-
-	// Validate First Name
-	if ($.trim(firstName.val()) == '') {
-		firstName.css('border-color', 'red');
-		showError(firstName, "First Name is required.");
-		invalidForm = true;
-	} else {
-		// Remove the red border if valid
-		firstName.css('border-color', '');
-		firstName.next('.error-message').remove();
-	}
-
-	// Validate Last Name
-	if ($.trim(lastName.val()) == '') {
-		lastName.css('border-color', 'red');
-		showError(lastName, "Last Name is required.");
-		invalidForm = true;
-	} else {
-		// Remove the red border if valid
-		lastName.css('border-color', '');
-		lastName.next('.error-message').remove(); // Remove error message if input is valid
-	}
-
-	// Validate Email Address
-	if ($.trim(emailAddress.val()) == '') {
-		emailAddress.css('border-color', 'red');
-		showError(emailAddress, "Email Address is required.");
-		invalidForm = true;
-	} else if (!isValidEmailAddress(emailAddress.val())) {
-		emailAddress.css('border-color', 'red');
-		showError(emailAddress, "Please enter a valid Email Address.");
-		invalidEmail = true;
-	} else {
-		// Remove the red border if valid
-		emailAddress.css('border-color', '');
-		emailAddress.next('.error-message').remove(); // Remove error message if input is valid
-	}
-
-	// Validate Phone Number
-	if ($.trim(phoneNumber.val()) == '') {
-		phoneNumber.css('border-color', 'red');
-		showError(phoneNumber, "Phone Number is required.");
-		invalidPhone = true;
-	} else {
-		// Remove the red border if valid
-		phoneNumber.css('border-color', '');
-		phoneNumber.next('.error-message').remove(); // Remove error message if input is valid
-	}
-
-	// Validate Party Address
-	if ($.trim(partyAddress.val()) == '') {
-		partyAddress.css('border-color', 'red');
-		showError(partyAddress, "Party Address is required.");
-		invalidForm = true;
-	} else {
-		// Remove the red border if valid
-		partyAddress.css('border-color', '');
-		partyAddress.next('.error-message').remove(); // Remove error message if input is valid
-	}
-
-	// Validate Party ZIP Code
-	if ($.trim(partyZip.val()) == '') {
-		partyZip.css('border-color', 'red');
-		showError(partyZip, "ZIP Code is required.");
-		invalidForm = true;
-	} else if (!isValidPartyZip(partyZip.val())) {
-		partyZip.css('border-color', 'red');
-		showError(partyZip, "Please enter a valid ZIP Code.");
-		invalidZip = true;
-	} else {
-		// Remove the red border if valid
-		partyZip.css('border-color', '');
-		partyZip.next('.error-message').remove(); // Remove error message if input is valid
-	}
-
-	// Validate Captcha (if necessary)
-	if ($.trim(pppDo.val()) != '') {
-		invalidForm = true;
-	}
-
-	// Show error message if any validation fails
-	if (invalidForm) {
-		showErrorMessage("Please fill the highlighted fields.");
-		return false;
-	} else if (invalidEmail) {
-		showErrorMessage("Please enter a valid Email Address.");
-		return false;
-	} else if (invalidPhone) {
-		showErrorMessage("Please enter a valid phone number.");
-		return false;
-	} else if (invalidZip) {
-		showErrorMessage("Please enter a valid ZIP Code.");
-		return false;
-	} else if (invalidCaptcha) {
-		showErrorMessage("Please click on Captcha.");
-		return false;
-	} else {
-		$('#submitForm').text('Processing...');
-		$('#submitForm').addClass('stepDisabled');
-		// Submit the form if all required fields are valid
-		jQuery("#bookingForm").submit();
-		return true;
-	}
-	// Utility function to show error message below input
-	function showError(inputElement, message) {
-		var error = $('<span class="error-message" style="color:red; font-size: 12px;">' + message + '</span>');
-		inputElement.after(error); // Append error message after the input element
-	}
-
-	// Function to show general error message
-	function showErrorMessage(message) {
-		$('.bookingError').html(message).fadeIn();
-		setTimeout(function () {
-			$('.bookingError').fadeOut("slow");
-		}, 5000);
-	}
-})

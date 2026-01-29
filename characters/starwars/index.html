@@ -26,13 +26,14 @@
             <a href="/characters/princesses/" class="nav__link">Princesses</a>
             <a href="/characters/superheroes/" class="nav__link">Superheroes</a>
             <a href="/characters/mascots/" class="nav__link">Mascots</a>
-            <a href="/characters/storybook/" class="nav__link">Storybook</a>
+            <a href="/characters/storybook/" class="nav__link">Other Characters</a>
             <a href="/characters/starwars/" class="nav__link nav__link--active">Star Wars</a>
             <a href="/characters/holiday/" class="nav__link">Holiday</a>
           </div>
         </div>
         <a href="/locations/" class="nav__link">Locations</a>
         <a href="/about/" class="nav__link">About</a>
+        <a href="/reviews/" class="nav__link">Reviews</a>
         <a href="/contact/" class="nav__link">Contact</a>
         <a href="tel:+18562008156" class="btn btn--outline">856-200-8156</a>
         <a href="/book-now/" class="btn btn--primary">Book Now</a>
@@ -101,7 +102,7 @@
             <span class="character-card__cta">View &amp; Book &rarr;</span>
           </div>
         </a>
-        <a href="/characters/starwars/princess-leia/" class="character-card">
+        <a href="/characters/starwars/leia/" class="character-card">
           <div class="character-card__image">
             <img src="/images/characters/princess-leia.jpg" alt="Princess Leia party character" width="300" height="400" loading="lazy">
           </div>
@@ -112,20 +113,136 @@
             <span class="character-card__cta">View &amp; Book &rarr;</span>
           </div>
         </a>
-        <a href="/characters/starwars/force-warrior/" class="character-card">
+        <a href="/characters/starwars/mandalorian/" class="character-card">
           <div class="character-card__image">
-            <img src="/images/characters/force-warrior.jpg" alt="Force Warrior party character" width="300" height="400" loading="lazy">
+            <img src="/images/characters/mandalorian.jpg" alt="Mandalorian party character" width="300" height="400" loading="lazy">
           </div>
           <div class="character-card__content">
-            <span class="character-card__category">Original</span>
-            <h3 class="character-card__name">Force Warrior</h3>
-            <p class="character-card__desc">Epic lightsaber battles and Force training!</p>
+            <span class="character-card__category">Bounty Hunter</span>
+            <h3 class="character-card__name">Mandalorian</h3>
+            <p class="character-card__desc">This is the way! The legendary bounty hunter arrives!</p>
+            <span class="character-card__cta">View &amp; Book &rarr;</span>
+          </div>
+        </a>
+        <a href="/characters/starwars/rey/" class="character-card">
+          <div class="character-card__image">
+            <img src="/images/characters/rey.jpg" alt="Rey party character" width="300" height="400" loading="lazy">
+          </div>
+          <div class="character-card__content">
+            <span class="character-card__category">Resistance</span>
+            <h3 class="character-card__name">Rey</h3>
+            <p class="character-card__desc">The powerful Jedi brings hope and adventure!</p>
             <span class="character-card__cta">View &amp; Book &rarr;</span>
           </div>
         </a>
       </div>
     </div>
   </section>
+
+  <!-- Party Photos Gallery -->
+  <section class="section">
+    <div class="container">
+      <h2 class="category-section__title">Real Star Wars Parties</h2>
+      <style>
+        .party-scroll {
+          display: flex;
+          gap: 1rem;
+          overflow-x: auto;
+          padding: 0.5rem 0 1.5rem;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+        }
+        .party-scroll::-webkit-scrollbar {
+          height: 8px;
+        }
+        .party-scroll::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 4px;
+        }
+        .party-scroll::-webkit-scrollbar-thumb {
+          background: #ccc;
+          border-radius: 4px;
+        }
+        .party-scroll::-webkit-scrollbar-thumb:hover {
+          background: #aaa;
+        }
+        .party-scroll__item {
+          flex-shrink: 0;
+          width: 350px;
+          height: 260px;
+          border-radius: 12px;
+          overflow: hidden;
+          scroll-snap-align: start;
+          cursor: pointer;
+        }
+        .party-scroll__item img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+        .party-scroll__item:hover img {
+          transform: scale(1.05);
+        }
+        @media (max-width: 768px) {
+          .party-scroll__item {
+            width: 300px;
+            height: 220px;
+          }
+        }
+        /* Lightbox styles */
+        .lightbox {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.9);
+          z-index: 9999;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+        .lightbox.active {
+          display: flex;
+        }
+        .lightbox img {
+          max-width: 90%;
+          max-height: 90%;
+          border-radius: 8px;
+          box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+        .lightbox__close {
+          position: absolute;
+          top: 20px;
+          right: 30px;
+          color: white;
+          font-size: 40px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .lightbox__close:hover {
+          color: #ccc;
+        }
+      </style>
+      <div class="party-scroll">
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/starwars-parties/party-1.jpg')"><img src="/images/gallery/starwars-parties/party-1.jpg" alt="Star Wars birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/starwars-parties/party-2.jpg')"><img src="/images/gallery/starwars-parties/party-2.jpg" alt="Star Wars birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/starwars-parties/party-3.jpg')"><img src="/images/gallery/starwars-parties/party-3.jpg" alt="Star Wars birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/starwars-parties/party-4.jpg')"><img src="/images/gallery/starwars-parties/party-4.jpg" alt="Star Wars birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/starwars-parties/party-5.jpg')"><img src="/images/gallery/starwars-parties/party-5.jpg" alt="Star Wars birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/starwars-parties/party-6.jpg')"><img src="/images/gallery/starwars-parties/party-6.jpg" alt="Star Wars birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/starwars-parties/party-7.jpg')"><img src="/images/gallery/starwars-parties/party-7.jpg" alt="Star Wars birthday party" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox__close">&times;</span>
+    <img src="" alt="Enlarged party photo" id="lightbox-img">
+  </div>
 
   <section class="section section--cream">
     <div class="container">
@@ -148,7 +265,18 @@
           <h3 class="feature-card__title">Galactic Games</h3>
           <p class="feature-card__desc">Star Wars themed games and adventures.</p>
         </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">&#127874;</div>
+          <h3 class="feature-card__title">Birthday Ceremony</h3>
+          <p class="feature-card__desc">Your character leads Happy Birthday and helps with the cake ceremony.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">&#127912;</div>
+          <h3 class="feature-card__title">Face Painting*</h3>
+          <p class="feature-card__desc">Star Wars-themed face painting transforms kids into their favorite characters.</p>
+        </div>
       </div>
+      <p class="section__note" style="text-align: center; margin-top: var(--space-md); font-size: 0.9rem; color: #666;">*Face painting is only available with unmasked characters (Princess Leia, Rey, Jedi) as masked characters wear gloves.</p>
     </div>
   </section>
 
@@ -194,6 +322,23 @@
     </div>
   </footer>
 
-  <script>document.getElementById('menu-toggle').addEventListener('click', function() { document.getElementById('nav').classList.toggle('nav--open'); });</script>
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', function() { document.getElementById('nav').classList.toggle('nav--open'); });
+
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 </body>
 </html>

@@ -68,13 +68,14 @@
             <a href="/characters/princesses/" class="nav__link nav__link--active">Princesses</a>
             <a href="/characters/superheroes/" class="nav__link">Superheroes</a>
             <a href="/characters/mascots/" class="nav__link">Mascots</a>
-            <a href="/characters/storybook/" class="nav__link">Storybook</a>
+            <a href="/characters/storybook/" class="nav__link">Other Characters</a>
             <a href="/characters/starwars/" class="nav__link">Star Wars</a>
             <a href="/characters/holiday/" class="nav__link">Holiday</a>
           </div>
         </div>
         <a href="/locations/" class="nav__link">Locations</a>
         <a href="/about/" class="nav__link">About</a>
+        <a href="/reviews/" class="nav__link">Reviews</a>
         <a href="/contact/" class="nav__link">Contact</a>
         <a href="tel:+18562008156" class="btn btn--outline">856-200-8156</a>
         <a href="/book-now/" class="btn btn--primary">Book Now</a>
@@ -148,18 +149,6 @@
           </div>
         </a>
 
-        <a href="/characters/princesses/kristoff/" class="character-card">
-          <div class="character-card__image">
-            <img src="/images/characters/kristoff.jpg" alt="Kristoff Frozen party character" width="300" height="400" loading="lazy">
-          </div>
-          <div class="character-card__content">
-            <span class="character-card__category">Frozen</span>
-            <h3 class="character-card__name">Kristoff</h3>
-            <p class="character-card__desc">The rugged ice harvester brings mountain adventures and reindeer fun to your party!</p>
-            <span class="character-card__cta">View &amp; Book &rarr;</span>
-          </div>
-        </a>
-
         <a href="/characters/princesses/olaf/" class="character-card">
           <div class="character-card__image">
             <img src="/images/characters/olaf.jpg" alt="Olaf Frozen party character" width="300" height="400" loading="lazy">
@@ -167,10 +156,23 @@
           <div class="character-card__content">
             <span class="character-card__category">Frozen</span>
             <h3 class="character-card__name">Olaf</h3>
-            <p class="character-card__desc">The lovable snowman brings warm hugs and summer dreams to your celebration!</p>
+            <p class="character-card__desc">The lovable snowman who loves warm hugs brings laughter and joy!</p>
             <span class="character-card__cta">View &amp; Book &rarr;</span>
           </div>
         </a>
+
+        <a href="/characters/princesses/kristoff/" class="character-card">
+          <div class="character-card__image">
+            <img src="/images/characters/kristoff.jpg" alt="Kristoff Frozen party character" width="300" height="400" loading="lazy">
+          </div>
+          <div class="character-card__content">
+            <span class="character-card__category">Frozen</span>
+            <h3 class="character-card__name">Kristoff</h3>
+            <p class="character-card__desc">The rugged mountain man and ice harvester joins the Arendelle adventure!</p>
+            <span class="character-card__cta">View &amp; Book &rarr;</span>
+          </div>
+        </a>
+
       </div>
     </div>
   </section>
@@ -316,7 +318,7 @@
           <h3>Merida (Brave)</h3>
           <span>View &rarr;</span>
         </a>
-        <a href="/characters/princesses/sofia/" class="character-card character-card--compact">
+        <a href="/characters/princesses/sofia-the-first/" class="character-card character-card--compact">
           <h3>Sofia the First</h3>
           <span>View &rarr;</span>
         </a>
@@ -324,7 +326,7 @@
           <h3>Unicorn Princess</h3>
           <span>View &rarr;</span>
         </a>
-        <a href="/characters/princesses/mermaid/" class="character-card character-card--compact">
+        <a href="/characters/princesses/live-action-mermaid/" class="character-card character-card--compact">
           <h3>Live-Action Mermaid</h3>
           <span>View &rarr;</span>
         </a>
@@ -332,8 +334,117 @@
     </div>
   </section>
 
-  <!-- What Princess Parties Include -->
+  <!-- Party Photos Gallery -->
   <section class="section section--cream">
+    <div class="container">
+      <h2 class="category-section__title">Real Princess Parties</h2>
+      <style>
+        .party-scroll {
+          display: flex;
+          gap: 1rem;
+          overflow-x: auto;
+          padding: 0.5rem 0 1.5rem;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+        }
+        .party-scroll::-webkit-scrollbar {
+          height: 8px;
+        }
+        .party-scroll::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 4px;
+        }
+        .party-scroll::-webkit-scrollbar-thumb {
+          background: #ccc;
+          border-radius: 4px;
+        }
+        .party-scroll::-webkit-scrollbar-thumb:hover {
+          background: #aaa;
+        }
+        .party-scroll__item {
+          flex-shrink: 0;
+          width: 350px;
+          height: 260px;
+          border-radius: 12px;
+          overflow: hidden;
+          scroll-snap-align: start;
+          cursor: pointer;
+        }
+        .party-scroll__item img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+        .party-scroll__item:hover img {
+          transform: scale(1.05);
+        }
+        @media (max-width: 768px) {
+          .party-scroll__item {
+            width: 300px;
+            height: 220px;
+          }
+        }
+        /* Lightbox styles */
+        .lightbox {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.9);
+          z-index: 9999;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+        .lightbox.active {
+          display: flex;
+        }
+        .lightbox img {
+          max-width: 90%;
+          max-height: 90%;
+          border-radius: 8px;
+          box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+        .lightbox__close {
+          position: absolute;
+          top: 20px;
+          right: 30px;
+          color: white;
+          font-size: 40px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .lightbox__close:hover {
+          color: #ccc;
+        }
+      </style>
+      <div class="party-scroll">
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-1.jpg')"><img src="/images/gallery/princess-parties/party-1.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-2.jpg')"><img src="/images/gallery/princess-parties/party-2.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-3.jpg')"><img src="/images/gallery/princess-parties/party-3.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-4.jpg')"><img src="/images/gallery/princess-parties/party-4.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-5.jpg')"><img src="/images/gallery/princess-parties/party-5.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-6.jpg')"><img src="/images/gallery/princess-parties/party-6.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-7.jpg')"><img src="/images/gallery/princess-parties/party-7.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-8.jpg')"><img src="/images/gallery/princess-parties/party-8.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-9.jpg')"><img src="/images/gallery/princess-parties/party-9.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-10.jpg')"><img src="/images/gallery/princess-parties/party-10.jpg" alt="Princess birthday party" loading="lazy"></div>
+        <div class="party-scroll__item" onclick="openLightbox('/images/gallery/princess-parties/party-11.jpg')"><img src="/images/gallery/princess-parties/party-11.jpg" alt="Princess birthday party" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox__close">&times;</span>
+    <img src="" alt="Enlarged party photo" id="lightbox-img">
+  </div>
+
+  <!-- What Princess Parties Include -->
+  <section class="section">
     <div class="container">
       <div class="section__header">
         <h2>What's Included in a Princess Party</h2>
@@ -352,9 +463,9 @@
           <p class="feature-card__desc">Interactive dances, royal waltzes, and fun group dances for all the party guests.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-card__icon">&#128081;</div>
-          <h3 class="feature-card__title">Coronation Ceremony</h3>
-          <p class="feature-card__desc">The birthday child is crowned as an honorary princess with a special ceremony.</p>
+          <div class="feature-card__icon">🎨</div>
+          <h3 class="feature-card__title">Face Painting</h3>
+          <p class="feature-card__desc">Professional face painting transforms party guests into princesses, butterflies, and more.</p>
         </div>
         <div class="feature-card">
           <div class="feature-card__icon">&#127922;</div>
@@ -385,7 +496,7 @@
       <div class="faq">
         <details class="faq__item">
           <summary class="faq__question">Do your princesses actually sing?</summary>
-          <p class="faq__answer">Yes! All our princess performers are trained vocalists who sing live versions of iconic songs from their movies. Elsa sings "Let It Go," Moana sings "How Far I'll Go," and so on.</p>
+          <p class="faq__answer">Many of our princess performers are trained vocalists who sing live versions of iconic songs from their movies. If singing is important for your event, simply let us know when booking that you'd like a singing princess, and we'll do our best to assign a performer who sings!</p>
         </details>
 
         <details class="faq__item">
@@ -433,7 +544,7 @@
             <li><a href="/characters/princesses/">Princesses</a></li>
             <li><a href="/characters/superheroes/">Superheroes</a></li>
             <li><a href="/characters/mascots/">Mascots</a></li>
-            <li><a href="/characters/storybook/">Storybook</a></li>
+            <li><a href="/characters/storybook/">Other Characters</a></li>
             <li><a href="/characters/starwars/">Star Wars</a></li>
             <li><a href="/characters/holiday/">Holiday</a></li>
           </ul>
@@ -468,6 +579,21 @@
   <script>
     document.getElementById('menu-toggle').addEventListener('click', function() {
       document.getElementById('nav').classList.toggle('nav--open');
+    });
+
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
     });
   </script>
 </body>

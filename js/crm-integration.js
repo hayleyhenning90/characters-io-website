@@ -12,9 +12,12 @@
 
 // CRM Configuration - Update this URL for production
 const CRM_CONFIG = {
-  // Change this to your production CRM URL when deploying
-  apiUrl: 'http://localhost:3002/api/public/leads',
-  source: 'Website - characters.io'
+  // Uses production URL if not on localhost, otherwise uses local dev URL
+  apiUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3002/api/public/leads'
+    : 'https://crm.characters.io/api/public/leads', // Update this to your production CRM URL
+  source: 'Website - characters.io',
+  timeout: 10000 // 10 second timeout for CRM requests
 };
 
 /**
@@ -23,13 +26,20 @@ const CRM_CONFIG = {
  */
 async function submitToCRM(formData) {
   try {
+    // Create an AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CRM_CONFIG.timeout);
+
     const response = await fetch(CRM_CONFIG.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     const result = await response.json();
 
@@ -39,6 +49,10 @@ async function submitToCRM(formData) {
 
     return { success: true, data: result };
   } catch (error) {
+    if (error.name === 'AbortError') {
+      console.warn('CRM submission timed out, will use fallback');
+      return { success: false, error: 'Request timed out', timeout: true };
+    }
     console.error('CRM submission error:', error);
     return { success: false, error: error.message };
   }
@@ -160,6 +174,7 @@ function showSuccessMessage(container, message) {
 
 /**
  * Initialize CRM integration for booking form
+ * This intercepts the submit button click and handles validation + CRM submission
  */
 function initBookingFormIntegration() {
   const bookingForm = document.getElementById('bookingForm');
@@ -169,12 +184,20 @@ function initBookingFormIntegration() {
     return; // Not on booking page
   }
 
-  // Override the submit form click handler
+  // Flag to track if we're handling CRM submission
+  let crmSubmissionInProgress = false;
+
+  // Intercept the submit button click BEFORE booking.js handles it
   submitButton.addEventListener('click', async function(e) {
     e.preventDefault();
     e.stopPropagation();
+    e.stopImmediatePropagation();
 
-    // Validate form first (reusing existing validation)
+    if (crmSubmissionInProgress) {
+      return false;
+    }
+
+    // Run validation (same as booking.js)
     const firstName = document.getElementById('firstName');
     const lastName = document.getElementById('lastName');
     const emailAddress = document.getElementById('emailAddress');
@@ -186,7 +209,9 @@ function initBookingFormIntegration() {
     let invalidForm = false;
 
     // Reset styles
-    document.querySelectorAll('input').forEach(input => input.style.borderColor = '');
+    document.querySelectorAll('.bookingContact input').forEach(input => {
+      input.style.borderColor = '';
+    });
 
     // Basic validation
     if (!firstName?.value?.trim()) { firstName.style.borderColor = 'red'; invalidForm = true; }
@@ -209,6 +234,8 @@ function initBookingFormIntegration() {
       return false;
     }
 
+    crmSubmissionInProgress = true;
+
     // Show processing state
     submitButton.textContent = 'Processing...';
     submitButton.classList.add('stepDisabled');
@@ -218,7 +245,7 @@ function initBookingFormIntegration() {
     const result = await submitToCRM(formData);
 
     if (result.success) {
-      // Show success message
+      // CRM submission succeeded - show success message
       showSuccessMessage(
         document.querySelector('.booking-container'),
         "We've received your booking request and will contact you within 24 hours to confirm. Check your email for confirmation details."
@@ -235,18 +262,23 @@ function initBookingFormIntegration() {
         fbq('track', 'Lead');
       }
     } else {
-      // Show error and reset button
+      // CRM failed - show user-friendly error
+      console.error('CRM submission failed:', result.error);
+
       const errorDiv = document.querySelector('.bookingError');
       if (errorDiv) {
-        errorDiv.innerHTML = result.error || 'Something went wrong. Please try again or call us at 856-200-8156.';
+        errorDiv.innerHTML = 'Unable to process your request right now. Please call us at <a href="tel:856-200-8156" style="color: inherit; text-decoration: underline;">856-200-8156</a> to complete your booking.';
         errorDiv.style.display = 'block';
       }
+
+      // Reset button so user can try again
       submitButton.textContent = 'Request Booking';
       submitButton.classList.remove('stepDisabled');
     }
 
+    crmSubmissionInProgress = false;
     return false;
-  }, true); // Use capture to run before other handlers
+  }, true); // Use capture phase to run BEFORE other handlers
 }
 
 /**

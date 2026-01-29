@@ -678,10 +678,13 @@ img[src*="logo"] {
   .categories__grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 300px);
+    align-items: stretch;
   }
 
   .categories__grid .category-card:first-child {
     grid-row: span 2;
+    height: auto;
+    min-height: auto;
   }
 }
 
@@ -689,6 +692,13 @@ img[src*="logo"] {
   .categories__grid {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 280px);
+    align-items: stretch;
+  }
+
+  .categories__grid .category-card:first-child {
+    grid-row: span 2;
+    height: auto;
+    min-height: auto;
   }
 }
 
@@ -796,8 +806,20 @@ img[src*="logo"] {
 
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
+}
+
+@media (max-width: 900px) {
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
 }
 
 .feature {
@@ -871,6 +893,8 @@ img[src*="logo"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Prioritize top of image to preserve faces in character portraits */
+  object-position: top center;
   transition: transform var(--duration-slow) var(--ease-out);
 }
 
@@ -1355,6 +1379,8 @@ img[src*="logo"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Prioritize top of image to preserve faces in character portraits */
+  object-position: top center;
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
@@ -3071,6 +3097,8 @@ img[src*="logo"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Prioritize top of image to preserve faces in character portraits */
+  object-position: top center;
   transition: transform var(--duration-slow) var(--ease-out);
 }
 
@@ -3406,21 +3434,24 @@ img[src*="logo"] {
 .party-gallery {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 200px);
+  /* Increased row height from 200px to 280px to better accommodate portrait images */
+  grid-template-rows: repeat(2, 280px);
   gap: var(--space-md);
 }
 
 @media (max-width: 1024px) {
   .party-gallery {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 180px);
+    /* Increased from 180px to 260px for tablets */
+    grid-template-rows: repeat(2, 260px);
   }
 }
 
 @media (max-width: 640px) {
   .party-gallery {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 150px);
+    /* Increased from 150px to 220px for mobile */
+    grid-template-rows: repeat(3, 220px);
   }
 }
 
@@ -3447,6 +3478,13 @@ img[src*="logo"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /*
+   * FIX: object-position set to 'top center' to prioritize faces and heads
+   * in portrait images. This prevents cropping of important top portions
+   * like faces in character photos while maintaining the grid layout.
+   * Works for both portrait and landscape orientations.
+   */
+  object-position: top center;
   transition: transform var(--duration-slow) var(--ease-out);
 }
 
@@ -3546,4 +3584,84 @@ img[src*="logo"] {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ============================================
+   Image Lightbox Modal
+   ============================================ */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-lg);
+}
+
+.lightbox--open {
+  display: flex;
+}
+
+.lightbox__content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox__close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: var(--white);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--plum);
+  transition: all var(--duration-fast);
+}
+
+.lightbox__close:hover {
+  background: var(--pink);
+  color: var(--white);
+  transform: scale(1.1);
+}
+
+/* Make gallery items clickable */
+.party-gallery__item {
+  cursor: pointer;
+}
+
+.party-gallery__item::before {
+  content: '🔍';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 2rem;
+  z-index: 2;
+  transition: transform var(--duration-fast);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.party-gallery__item:hover::before {
+  transform: translate(-50%, -50%) scale(1);
 }

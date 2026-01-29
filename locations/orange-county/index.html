@@ -20,24 +20,89 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Characters.io - Orange County",
-    "url": "https://characters.io/locations/orange-county/",
-    "logo": "https://characters.io/images/logo/logo-color.png",
-    "description": "Premier party character entertainment company in Orange County offering princess parties, superhero characters, and mascot performers for birthday parties and events throughout OC.",
-    "telephone": "+1-856-200-8156",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Anaheim",
-      "addressRegion": "CA",
-      "addressCountry": "US"
-    },
-    "areaServed": ["Orange County", "Anaheim", "Irvine", "Newport Beach", "Huntington Beach", "Costa Mesa", "Laguna Beach", "Fullerton", "Mission Viejo", "Lake Forest", "Tustin"],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5.0",
-      "reviewCount": "312"
-    }
+    "@graph": [
+      {
+        "@type": ["LocalBusiness", "EntertainmentBusiness"],
+        "@id": "https://characters.io/locations/orange-county/#localbusiness",
+        "name": "Characters.io - Orange County",
+        "description": "Premier party character entertainment in Orange County. Princess parties, superhero characters, and mascot performers for birthday parties and events.",
+        "url": "https://characters.io/locations/orange-county/",
+        "telephone": "+1-856-200-8156",
+        "priceRange": "$$",
+        "image": "https://characters.io/images/locations/orange-county.jpg",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "12340 Seal Beach Blvd, Suite B, #372",
+          "addressLocality": "Seal Beach",
+          "addressRegion": "CA",
+          "postalCode": "90740",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 33.7614,
+          "longitude": -117.8311
+        },
+        "areaServed": [
+          {"@type": "City", "name": "Anaheim, CA"},
+          {"@type": "City", "name": "Irvine, CA"},
+          {"@type": "City", "name": "Newport Beach, CA"},
+          {"@type": "City", "name": "Huntington Beach, CA"},
+          {"@type": "City", "name": "Costa Mesa, CA"},
+          {"@type": "City", "name": "Laguna Beach, CA"},
+          {"@type": "City", "name": "Fullerton, CA"},
+          {"@type": "City", "name": "Orange, CA"},
+          {"@type": "City", "name": "Mission Viejo, CA"},
+          {"@type": "City", "name": "Lake Forest, CA"},
+          {"@type": "City", "name": "Tustin, CA"},
+          {"@type": "City", "name": "Yorba Linda, CA"}
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "bestRating": "5",
+          "worstRating": "1",
+          "ratingCount": "312",
+          "reviewCount": "312"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "09:00",
+            "closes": "18:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Saturday", "Sunday"],
+            "opens": "08:00",
+            "closes": "20:00"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://characters.io/locations/orange-county/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What areas in Orange County do you serve?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We serve all of Orange County including Anaheim, Irvine, Newport Beach, Huntington Beach, Costa Mesa, Laguna Beach, Fullerton, Orange, Mission Viejo, Lake Forest, Tustin, Yorba Linda, and surrounding areas."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you come to Disneyland-area hotels in Anaheim?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! We regularly perform at hotels near Disneyland in Anaheim for birthday parties and special celebrations. Our characters are completely independent and not affiliated with Disney parks."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 </head>
@@ -64,6 +129,7 @@
         <a href="/locations/" class="nav__link nav__link--active">Locations</a>
         <a href="/blog/" class="nav__link">Blog</a>
         <a href="/about/" class="nav__link">About</a>
+        <a href="/reviews/" class="nav__link">Reviews</a>
         <a href="/contact/" class="nav__link">Contact</a>
         <a href="tel:+18562008156" class="btn btn--outline">856-200-8156</a>
         <a href="/book-now/" class="btn btn--primary">Book Now</a>
@@ -461,7 +527,7 @@
             <li><a href="/blog/" class="footer__link">Blog</a></li>
             <li><a href="/contact/" class="footer__link">Contact</a></li>
             <li><a href="/careers/" class="footer__link">Become a Performer</a></li>
-            <li><a href="/privacy/" class="footer__link">Privacy Policy</a></li>
+            <li><a href="/privacy-policy/" class="footer__link">Privacy Policy</a></li>
           </ul>
         </div>
       </div>
